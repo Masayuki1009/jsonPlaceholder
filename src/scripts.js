@@ -27,31 +27,15 @@ const buildPhotoCard = (photo) => {
 const searchPhoto = (searchInput, photos) =>
   photos.filter((p) => p.title.match(new RegExp(searchInput, "gi")));
 
-
-const filterPhotos =  async () => {
-  const searchInput = photoSearch.value;
-
-  if (searchInput === "") {
-    await fetch(endpoint);
-    renderPhotos(photos);
-    return;
-  }
-  
-  filteredPhotos = searchPhoto(searchInput, photos);
-  renderPhotos(filteredPhotos);
-}
-
-
-const initPhotos = async () => {
-    const res = await fetch(endpoint)
-    const photo = await res.json()
-    renderPhotos(photo)
-photoSearch.addEventListener("keyup", filterPhotos);
-}
-initPhotos();
-
-
-
-
+fetch(endpoint)
+.then((res) => res.json())
+.then((photos) =>{
+  renderPhotos(photos)
+  photoSearch.addEventListener("keyup", () =>{
+    const searchInput = photoSearch.value;
+    filteredPhotos = searchPhoto(searchInput, photos);
+    renderPhotos(filteredPhotos);
+  })
+})
 
 
